@@ -1,16 +1,16 @@
-function ProfileCard({ user }) {
+function ProfileCard({ user: { name, role, avatar, isOnline, messages } }) {
   return (
     <div>
       <img
-        src={user.avatar}
-        alt={user.name}
+        src={avatar}
+        alt={name}
         className="avatar"
         style={{ width: 64, borderRadius: "50%" }}
       />
-      <h2>{user.name.toUpperCase()}</h2>
-      <label htmlFor="bio">الدور: {user.role}</label>
-      <p>الحالة: <span style={{background: user.isOnline ? 'green' : 'red', width: 10, height: 10, borderRadius: '50%', display: 'inline-block'}}></span></p>
-      {user.messages > 0 && <p>لديك {user.messages} رسائل</p>}
+      <h2>{name.toUpperCase()}</h2>
+      <p>الدور: {role}</p>
+      <p>الحالة: <span style={{background: isOnline ? 'green' : 'grey', width: 10, height: 10, borderRadius: '50%', display: 'inline-block'}}></span></p>
+      {messages > 0 && <p>لديك {messages} رسائل</p>}
     </div>
   );
 }
@@ -28,7 +28,7 @@ export default function Profile() {
     role: "Backend Dev",
     avatar: "https://i.pravatar.cc/100",
     isOnline: true,
-    messages: 0,
+    messages: 3,
   };
 
   return (
