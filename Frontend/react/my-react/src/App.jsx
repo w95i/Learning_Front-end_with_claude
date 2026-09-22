@@ -1,40 +1,71 @@
-function ProfileCard({ user: { name, role, avatar, isOnline, messages } }) {
+import { useState } from "react";
+
+function Button({ variant = "primary", children, ...rest }) {
+  return (
+    <button className={`btn btn-${variant}`} {...rest}>
+      {children}
+    </button>
+  );
+}
+
+function Card({ title, footer, children }) {
   return (
     <div>
-      <img
-        src={avatar}
-        alt={name}
-        className="avatar"
-        style={{ width: 64, borderRadius: "50%" }}
-      />
-      <h2>{name.toUpperCase()}</h2>
-      <p>الدور: {role}</p>
-      <p>الحالة: <span style={{background: isOnline ? 'green' : 'grey', width: 10, height: 10, borderRadius: '50%', display: 'inline-block'}}></span></p>
-      {messages > 0 && <p>لديك {messages} رسائل</p>}
+      <h2>{title}</h2>
+      <div>{children}</div>
+      <div>{footer}</div>
     </div>
   );
 }
 
-export default function Profile() {
-  const user = {
-    name: "Waeel",
-    role: "Frontend Dev",
-    avatar: "https://i.pravatar.cc/100",
-    isOnline: false,
-    messages: 0,
+function ProductCard({ product: { name, price, inStock }, onBuy, onRemove }) {
+
+  return (
+    <Card
+      title={name}
+      footer={
+        <>
+          <Button onClick={() => onBuy(name)} disabled={!inStock}>
+            {inStock ? "شراء" : "نفِد"}
+          </Button>
+          <Button variant="danger" onClick={() => onRemove(name)}>
+            حذف
+          </Button>
+        </>
+      }
+    >
+      <p>السعر: {price}</p>
+      <p>المخزون: {inStock ? "متوفر" : "غير متوفر"}</p>
+    </Card>
+  );
+}
+
+export default function App() {
+  const products = [
+    { name: "Product 1", price: 100, inStock: true },
+    { name: "Product 2", price: 200, inStock: false },
+    { name: "Product 3", price: 300, inStock: true },
+  ];
+
+  const handleRemove = (productName) => {
+    alert(`${productName} removed successfully`);
+    products.splice(products.indexOf(productName), 1);
   };
-  const user2 = {
-    name: "Ahmed",
-    role: "Backend Dev",
-    avatar: "https://i.pravatar.cc/100",
-    isOnline: true,
-    messages: 3,
+
+  const handleBuy = (productName) => {
+    alert(`${productName} bought successfully`);
   };
 
   return (
     <>
-      <ProfileCard user={user} />
-      <ProfileCard user={user2} />
+      {products.map((product) => (
+        <ProductCard
+          key={product.name}
+          product={product}
+          onBuy={handleBuy}
+          onRemove={handleRemove}
+        />
+      ))}
     </>
   );
 }
